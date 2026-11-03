@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}{{ item_name }} – NW Prices{% endblock %}
+{% block main %}
+<p class="crumbs"><a href="{{ url_for('index') }}">{{ t('nav.items') }}</a> <span id="crumbCat"></span></p>
+<h1 class="item-title">{{ item_name }}</h1>
+<p class="item-id muted">{{ item_id }}</p>
+
+<div class="item-layout">
+<div class="main-col">
+<section class="stats-row" id="statCards"></section>
+
+{% if is_admin %}
+<section class="panel shop-edit">
+  <h2>{{ t('item.shop_price') }}</h2>
+  <div class="row">
+    <input id="shopPrice" type="text" inputmode="decimal" placeholder="{{ t('item.price_placeholder') }}">
+    <input id="shopNote" type="text" placeholder="{{ t('item.note_placeholder') }}">
+    <button id="shopSave">{{ t('item.save') }}</button>
+  </div>
+  <div class="row suggest" id="suggest"></div>
+</section>
+{% else %}
+<section class="panel shop-edit">
+  <h2>{{ t('item.shop_price') }}</h2>
+  <div class="row"><span id="shopView" class="shop-view"></span></div>
+</section>
+{% endif %}
+
+<section class="panel" id="serverPanel">
+  <h2>{{ t('srv.compare') }}</h2>
+  <div class="table-wrap">
+  <table class="grid" id="serverCompare">
+    <thead><tr><th>{{ t('srv.label') }}</th><th>{{ t('srv.region') }}</th><th class="num">{{ t('col.listings') }}</th>
+      <th class="num">{{ t('col.quantity') }}</th><th class="num">{{ t('col.min') }}</th><th class="num">{{ t('col.median') }}</th>
+      <th class="num">{{ t('col.max') }}</th><th>{{ t('col.seen') }}</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+</section>
+
+<section class="panel" id="perkPanel" hidden>
+  <h2>{{ t('item.perks_title') }}</h2>
+  <p class="muted small">{{ t('item.perks_hint') }}</p>
+  <div class="table-wrap">
+  <table class="grid" id="perkTable">
+    <thead><tr><th>{{ t('col.perk') }}</th><th>{{ t('col.effect') }}</th><th class="num">{{ t('col.listings') }}</th>
+      <th class="num">{{ t('col.min') }}</th><th class="num">{{ t('col.median') }}</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+</section>
+
+<div id="perkFilter" class="filter-banner" hidden><span></span> <button class="ghost" id="perkFilterClear">{{ t('item.filter_clear') }}</button></div>
+
+<section class="panel" id="chartPanel">
+  <h2 id="chartTitle">{{ t('item.prices') }}</h2>
+  <div id="chart" class="chart"></div>
+</section>
+
+<section class="panel" id="historyPanel" hidden>
+  <h2>{{ t('item.history') }}</h2>
+  <div id="history" class="chart"></div>
+</section>
+
+<section class="panel">
+  <h2>{{ t('item.listings_title') }} <span class="muted" id="listCount"></span></h2>
+  <div class="table-wrap">
+  <table class="grid" id="listings">
+    <thead><tr>
+      {% if not server %}<th>{{ t('srv.label') }}</th>{% endif %}
+      <th class="num">{{ t('col.price') }}</th><th class="num">{{ t('col.quantity') }}</th>
+      <th class="num">{{ t('col.gs') }}</th><th class="num">{{ t('col.tier') }}</th>
+      <th>{{ t('col.perks') }}</th><th>{{ t('col.listed') }}</th><th>{{ t('col.seen') }}</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+</section>
+</div>
+<aside class="card-col">
+  <div id="card"></div>
+  <p class="muted small">{{ t('card.click_hint') }}</p>
+</aside>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>const ITEM_ID = {{ item_id|tojson }};</script>
+<script src="{{ url_for('static', filename='item.js') }}"></script>
+{% endblock %}

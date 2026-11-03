@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}NW Prices{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="{{ url_for('index') }}"><span class="coin"></span>NW Prices</a>
+  <nav>
+    <a href="{{ url_for('index') }}" class="{{ 'on' if page=='items' }}">{{ t('nav.items') }}</a>
+    <a href="{{ url_for('captures_page') }}" class="{{ 'on' if page=='captures' }}">{{ t('nav.captures') }}</a>
+    <span class="sep"></span>
+    <select id="serverSelect" class="server-select" aria-label="{{ t('srv.label') }}">
+      <option value="">{{ t('srv.all') }}</option>
+      {% for s in servers %}
+      <option value="{{ s.id }}" {{ 'selected' if server and server.id == s.id }}>{{ s.name }}{% if s.region %} · {{ s.region }}{% endif %}{% if not s.captures %} ({{ t('srv.no_data') }}){% endif %}</option>
+      {% endfor %}
+    </select>
+    <div class="lang-toggle" role="group" aria-label="{{ t('nav.language') }}">
+      {% for l in langs %}
+      <button type="button" data-lang="{{ l }}" class="{{ 'on' if l == lang }}" title="{{ lang_names[l] }}"
+              aria-pressed="{{ 'true' if l == lang else 'false' }}">{{ l|upper }}</button>
+      {% endfor %}
+    </div>
+    {% if is_admin %}
+      <span class="admin-badge">{{ t('nav.admin') }}</span>
+      <button type="button" class="ghost small-btn" id="logoutBtn">{{ t('nav.logout') }}</button>
+    {% elif login_enabled and page != 'login' %}
+      <a href="{{ url_for('login_page', next=request.full_path.rstrip('?')) }}" class="login-link">{{ t('nav.login') }}</a>
+    {% endif %}
+    <details class="menu">
+      <summary>{{ t('nav.export') }}</summary>
+      <div class="menu-body">
+        <a href="{{ url_for('export_shop_json') }}">{{ t('export.shop_json') }}</a>
+        <a href="{{ url_for('export_shop_csv') }}">{{ t('export.shop_csv') }}</a>
+        <a href="{{ url_for('export_items_csv') }}">{{ t('export.items_csv') }}</a>
+        <a href="{{ url_for('export_listings_csv') }}">{{ t('export.listings_csv') }}</a>
+      </div>
+    </details>
+  </nav>
+</header>
+<main>{% block main %}{% endblock %}</main>
+<div id="toast" class="toast" hidden></div>
+<script>
+  window.LANG = {{ lang|tojson }};
+  window.LOCALE = {{ locale|tojson }};
+  window.STRINGS = {{ js_strings|tojson }};
+  window.LANG_COOKIE = {{ lang_cookie|tojson }};
+  window.IS_ADMIN = {{ is_admin|tojson }};
+  window.SERVER_COOKIE = {{ server_cookie|tojson }};
+  window.SERVER = {{ (server.id if server else none)|tojson }};
+</script>
+<script src="{{ url_for('static', filename='common.js') }}"></script>
+<script src="{{ url_for('static', filename='card.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

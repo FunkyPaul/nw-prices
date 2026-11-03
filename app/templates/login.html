@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('login.title') }} – NW Prices{% endblock %}
+{% block main %}
+<section class="panel login-panel">
+  <h2>{{ t('login.title') }}</h2>
+  {% if not login_enabled %}
+    <p class="err">{{ t('login.disabled') }}</p>
+  {% elif is_admin %}
+    <p class="ok">✓ {{ t('nav.admin') }}</p>
+    <p><a href="{{ next }}">→ {{ next }}</a></p>
+  {% else %}
+    <p class="muted">{{ t('login.hint_private') if private else t('login.hint') }}</p>
+    <form id="loginForm" class="login-form" autocomplete="on">
+      <label>{{ t('login.user') }} <input id="loginUser" name="username" autocomplete="username" required></label>
+      <label>{{ t('login.password') }} <input id="loginPw" name="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">{{ t('login.submit') }}</button>
+      <p id="loginErr" class="err" hidden></p>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+(() => {
+  const f = document.getElementById('loginForm');
+  if (!f) return;
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = document.getElementById('loginErr');
+    err.hidden = true;
+    try {
+      await api('/api/login', { user: document.getElementById('loginUser').value, password: document.getElementById('loginPw').value });
+      location.href = {{ next|tojson }};
+    } catch (ex) {
+      err.textContent = ex.message; err.hidden = false;
+      document.getElementById('loginPw').select();
+    }
+  });
+})();
+</script>
+{% endblock %}

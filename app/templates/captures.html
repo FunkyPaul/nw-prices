@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}{{ t('nav.captures') }} – NW Prices{% endblock %}
+{% block main %}
+{% if is_admin %}
+<section class="panel">
+  <h2>{{ t('cap.upload') }}</h2>
+  <label class="srv-pick">{{ t('srv.choose') }}
+    <select id="uploadServer" required>
+      <option value="">–</option>
+      {% for s in servers %}<option value="{{ s.id }}" {{ 'selected' if server and server.id == s.id }}>{{ s.name }}{% if s.region %} · {{ s.region }}{% endif %}</option>{% endfor %}
+    </select>
+  </label>
+  <label id="drop" class="drop">
+    <input id="file" type="file" multiple accept=".zip,.bin">
+    <span>{{ t('cap.drop')|safe }}<br>
+    <small class="muted">{{ t('cap.drop_hint', mb=max_mb) }}</small></span>
+  </label>
+  <div id="uploadLog" class="log"></div>
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>{{ t('cap.imported') }}</h2>
+  {% if not captures %}<p class="muted">{{ t('cap.none') }}</p>{% endif %}
+  {% for c in captures %}
+  <details class="capture" data-id="{{ c.id }}">
+    <summary>
+      <span class="cap-name">{{ c.name }}</span>
+      <span class="pill srv-pill">{{ c.server or '?' }}{% if c.region %} · {{ c.region }}{% endif %}</span>
+      <span class="muted">{{ (c.started_at or '')[:16].replace('T', ' ') }} UTC</span>
+      <span class="pill">{{ t('cap.searches', n=c.searches) }}</span>
+      <span class="pill">{{ t('cap.listings', n=c.contracts) }}</span>
+      {% if c.errors %}<span class="pill warn" title="{{ t('cap.unreadable_title') }}">{{ t('cap.unreadable', n=c.errors) }}</span>{% endif %}
+    </summary>
+    <table class="grid small">
+      <thead><tr><th>{{ t('cap.time') }}</th><th>{{ t('cap.filter') }}</th><th>{{ t('cap.sort') }}</th>
+        <th class="num">{{ t('cap.returned') }}</th><th class="num">{{ t('cap.total') }}</th></tr></thead>
+      <tbody>
+      {% for s in c.search_list %}
+        <tr><td>{{ (s.time or '')[11:19] }}</td><td>{{ s.filter or t('cap.everything') }}</td>
+        <td>{{ t('sort.' ~ s.sort) if s.sort in ('price', 'gear_score') else (s.sort or '') }} {{ '↓' if s.descending else '↑' }}</td>
+        <td class="num">{{ s.returned }}</td><td class="num">{{ s.total if s.total is not none else '' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% if is_admin %}
+    <div class="actions">
+      <label class="chk">{{ t('srv.move') }}
+        <select class="move-server">
+          {% for s in servers %}<option value="{{ s.id }}" {{ 'selected' if c.server_id == s.id }}>{{ s.name }}</option>{% endfor %}
+        </select>
+      </label>
+      <button class="ghost rename">{{ t('cap.rename') }}</button>
+      <button class="danger delete">{{ t('cap.delete') }}</button>
+    </div>
+    {% endif %}
+  </details>
+  {% endfor %}
+</section>
+{% if is_admin %}
+<section class="panel">
+  <h2>{{ t('srv.manage') }}</h2>
+  <table class="grid small" id="serverTable">
+    <thead><tr><th>{{ t('srv.name') }}</th><th>{{ t('srv.region') }}</th><th class="num">{{ t('srv.captures') }}</th><th>{{ t('srv.last') }}</th><th></th></tr></thead>
+    <tbody>
+    {% for s in servers %}
+      <tr data-id="{{ s.id }}">
+        <td><input class="srv-name" value="{{ s.name }}" maxlength="60"></td>
+        <td><input class="srv-region" value="{{ s.region or '' }}" maxlength="60"></td>
+        <td class="num">{{ s.captures }}</td>
+        <td class="muted">{{ (s.last_capture or '')[:16].replace('T', ' ') or t('srv.never') }}</td>
+        <td class="actions"><button class="ghost srv-save">{{ t('srv.save') }}</button>{% if not s.captures %}<button class="danger srv-del">{{ t('srv.delete') }}</button>{% endif %}</td>
+      </tr>
+    {% endfor %}
+      <tr class="srv-new">
+        <td><input id="newSrvName" placeholder="{{ t('srv.name') }}" maxlength="60"></td>
+        <td><input id="newSrvRegion" placeholder="{{ t('srv.region') }}" maxlength="60"></td>
+        <td></td><td></td>
+        <td class="actions"><button id="newSrvAdd">{{ t('srv.add') }}</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='captures.js') }}"></script>{% endblock %}

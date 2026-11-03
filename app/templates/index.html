@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block main %}
+<section class="stats-row">
+  <div class="stat"><b>{{ summary.item_count }}</b><span>{{ t('stat.items') }}</span></div>
+  <div class="stat"><b>{{ summary.contracts }}</b><span>{{ t('stat.listings') }}</span></div>
+  <div class="stat"><b>{{ summary.captures }}</b><span>{{ t('stat.captures') }}</span></div>
+  <div class="stat"><b id="shopCount">{{ summary.shop_prices }}</b><span>{{ t('stat.shop_set') }}</span></div>
+</section>
+
+{% if summary.captures == 0 %}
+<div class="empty">
+  <h2>{{ t('srv.empty_title', server=server.name) if server and summary.all_captures else t('empty.title') }}</h2>
+  <p>{{ t('empty.text', link='<a href="' ~ url_for('captures_page') ~ '">' ~ t('nav.captures') ~ '</a>')|safe }}</p>
+</div>
+{% else %}
+<section class="toolbar">
+  <input id="q" type="search" placeholder="{{ t('filter.search') }}" autocomplete="off">
+  <select id="cat"><option value="">{{ t('filter.all_categories') }}</option></select>
+  <select id="tier"><option value="">{{ t('filter.all_tiers') }}</option></select>
+  <select id="days" title="{{ t('filter.period_title') }}">
+    <option value="0">{{ t('filter.all_captures') }}</option>
+    <option value="1">{{ t('filter.last_24h') }}</option>
+    <option value="7">{{ t('filter.last_7d') }}</option>
+    <option value="30">{{ t('filter.last_30d') }}</option>
+  </select>
+  <span class="gs-filter" title="{{ t('filter.gs_title') }}">
+    <input id="gsMin" type="number" min="0" max="999" inputmode="numeric" placeholder="{{ t('filter.gs_min') }}">
+    <input id="gsMax" type="number" min="0" max="999" inputmode="numeric" placeholder="{{ t('filter.gs_max') }}">
+  </span>
+  <select id="has">
+    <option value="">{{ t('filter.listings_any') }}</option>
+    <option value="yes">{{ t('filter.listings_yes') }}</option>
+    <option value="no">{{ t('filter.listings_no') }}</option>
+  </select>
+  <label class="chk"><input id="onlyEmpty" type="checkbox"> {{ t('filter.only_empty') }}</label>
+  {% if is_admin %}<button id="bulkBtn" class="ghost">{{ t('bulk.button') }}</button>{% endif %}
+</section>
+
+{% if is_admin %}
+<dialog id="bulk">
+  <form method="dialog" class="bulk-form">
+    <h3>{{ t('bulk.title') }}</h3>
+    <p class="muted">{{ t('bulk.applies')|safe }}</p>
+    <label>{{ t('bulk.base') }}
+      <select id="bulkBase">
+        <option value="min">{{ t('base.min') }}</option>
+        <option value="p25">{{ t('base.p25') }}</option>
+        <option value="median" selected>{{ t('base.median') }}</option>
+        <option value="avg_weighted">{{ t('base.avg') }}</option>
+        <option value="max">{{ t('base.max') }}</option>
+      </select>
+    </label>
+    <label>{{ t('bulk.factor') }} <input id="bulkFactor" type="number" step="0.05" min="0" value="1"></label>
+    <label class="chk"><input id="bulkOnlyEmpty" type="checkbox" checked> {{ t('bulk.keep') }}</label>
+    <div class="actions"><button value="cancel" class="ghost">{{ t('bulk.cancel') }}</button><button id="bulkGo" value="ok">{{ t('bulk.apply') }}</button></div>
+  </form>
+</dialog>
+{% endif %}
+
+<div class="table-wrap">
+<table id="items" class="grid">
+  <thead><tr>
+    <th data-k="name">{{ t('col.item') }}</th>
+    <th data-k="category">{{ t('col.category') }}</th>
+    <th data-k="tier" class="num">{{ t('col.tier') }}</th>
+    <th data-k="gs_max" class="num" title="{{ t('filter.gs_title') }}">{{ t('col.gs') }}</th>
+    <th data-k="listings" class="num">{{ t('col.listings') }}</th>
+    <th data-k="quantity" class="num">{{ t('col.quantity') }}</th>
+    <th data-k="min" class="num">{{ t('col.min') }}</th>
+    <th data-k="median" class="num">{{ t('col.median') }}</th>
+    <th data-k="avg_weighted" class="num" title="{{ t('col.avg_title') }}">{{ t('col.avg') }}</th>
+    <th data-k="max" class="num">{{ t('col.max') }}</th>
+    <th data-k="shop_price" class="num shop">{{ t('col.shop') }}</th>
+  </tr></thead>
+  <tbody></tbody>
+</table>
+</div>
+<p class="muted small" id="count"></p>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='items.js') }}"></script>{% endblock %}
