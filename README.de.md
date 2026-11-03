@@ -20,6 +20,9 @@ Deutsch (die Wahl merkt sich der Browser).
   Englisch. Reihenfolge und Namen kommen aus den Spieldaten bzw. einem aufgezeichneten Klickverlauf
   (`ORDER` in `app/categories.py`, Item-Reihenfolge in `app/item_order.json`); nicht aufgezeichnete
   Einträge folgen alphabetisch. Die Spalte „Kategorie“ der Tabelle sortiert in derselben Reihenfolge.
+- **Ganze Bildschirmbreite und Handy-Ansicht**: Auf großen Bildschirmen füllt die Tabelle die Seite. Auf
+  Tablet und Handy wird die Kopfzeile umgebrochen, die Kategorien lassen sich ein- und ausklappen und
+  die Item-Übersicht erscheint als Karten statt als Tabelle.
 - **Einstellungen** (Menüpunkt oben): Spalten der Item-Übersicht einzeln ein- und ausblenden (alles außer dem
   Item-Namen). Die Auswahl wird nur im jeweiligen Browser gespeichert.
 - **Item-Detail**: alle Angebote mit Gear Score, Perks und Einstellzeit, Diagramm (Ausrüstung: Preis

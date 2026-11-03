@@ -65,6 +65,7 @@ const NWCard = (() => {
   function attach(root, selector, getCard) {
     let current = null;
     root.addEventListener('mouseover', async ev => {
+      if (!window.matchMedia('(hover: hover)').matches) return;   // Touch: keine schwebende Vorschau
       const el = ev.target.closest(selector);
       if (!el || el === current) return;
       current = el;

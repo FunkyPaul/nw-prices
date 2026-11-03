@@ -76,6 +76,9 @@
 
   function setCat(path) {
     state.cat = path;
+    // Handy: nach der Wahl einer untersten Kategorie die Navigation wieder einklappen
+    const n = nav.by.get(norm(path));
+    if (n && !n.c.length) $('catLayout')?.classList.remove('open');
     renderNav();
     render();
   }
@@ -84,6 +87,7 @@
     const box = $('catnav');
     if (!box) return;
     const sel = state.cat ? nav.by.get(norm(state.cat)) : null;
+    if ($('catToggle')) $('catToggle').innerHTML = `<span>${esc(t('cat.nav'))}: ${esc(sel ? sel.n : t('cat.all'))}</span>`;
     // Blatt gewaehlt: Liste der Geschwister zeigen und den Eintrag markieren
     const shown = sel && sel.c.length ? sel : (sel ? sel.parent : null);
     const list = shown ? shown.c : nav.roots;
@@ -102,6 +106,7 @@
         ${list.map(entry).join('')}
       </div>`;
   }
+  $('catToggle')?.addEventListener('click', () => $('catLayout').classList.toggle('open'));
   $('catnav')?.addEventListener('click', e => {
     const b = e.target.closest('button[data-p]');
     if (b) setCat(b.dataset.p);
@@ -155,16 +160,16 @@
     tbody.innerHTML = rows.map(r => `
       <tr>
         <td class="item" data-id="${esc(r.item_id)}"><div class="item-cell"><span class="mini-icon">${r.icon ? `<img src="${NWCard.iconUrl(r.icon)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span><span><a href="/item/${encodeURIComponent(r.item_id)}">${esc(r.name || r.item_id)}</a>${r.name && r.name !== r.item_id ? `<span class="iid">${esc(r.item_id)}</span>` : ''}</span></div></td>
-        <td class="cat" data-col="category">${esc(catLabel(r.category)).replace(/\//g, '/<wbr>')}</td>
-        <td class="num" data-col="tier">${tierBadge(r.tier)}</td>
-        <td class="num" data-col="gs">${r.gs_max ? (r.gs_min === r.gs_max ? r.gs_min : `${r.gs_min}–${r.gs_max}`) : '<span class="muted">–</span>'}</td>
-        <td class="num" data-col="listings">${r.listings ? int(r.listings) : `<span class="pill muted" title="${esc(t('items.no_listings_title'))}">${esc(t('items.no_listings'))}</span>`}</td>
-        <td class="num" data-col="quantity">${int(r.quantity)}</td>
-        <td class="num" data-col="min">${gold(r.min)}</td>
-        <td class="num" data-col="median">${gold(r.median)}</td>
-        <td class="num" data-col="avg">${gold(r.avg_weighted)}</td>
-        <td class="num" data-col="max">${gold(r.max)}</td>
-        <td class="num" data-col="shop">${window.IS_ADMIN ? `<input class="shop ${r.shop_price != null ? 'set' : ''}" data-id="${esc(r.item_id)}"
+        <td class="cat" data-col="category" data-label="${esc(t('col.category'))}">${esc(catLabel(r.category)).replace(/\//g, '/<wbr>')}</td>
+        <td class="num" data-col="tier" data-label="${esc(t('item.tier'))}">${tierBadge(r.tier)}</td>
+        <td class="num" data-col="gs" data-label="${esc(t('col.gs'))}">${r.gs_max ? (r.gs_min === r.gs_max ? r.gs_min : `${r.gs_min}–${r.gs_max}`) : '<span class="muted">–</span>'}</td>
+        <td class="num" data-col="listings" data-label="${esc(t('col.listings'))}">${r.listings ? int(r.listings) : `<span class="pill muted" title="${esc(t('items.no_listings_title'))}">${esc(t('items.no_listings'))}</span>`}</td>
+        <td class="num" data-col="quantity" data-label="${esc(t('col.quantity'))}">${int(r.quantity)}</td>
+        <td class="num" data-col="min" data-label="${esc(t('col.min'))}">${gold(r.min)}</td>
+        <td class="num" data-col="median" data-label="${esc(t('col.median'))}">${gold(r.median)}</td>
+        <td class="num" data-col="avg" data-label="${esc(t('col.avg'))}">${gold(r.avg_weighted)}</td>
+        <td class="num" data-col="max" data-label="${esc(t('col.max'))}">${gold(r.max)}</td>
+        <td class="num" data-col="shop" data-label="${esc(t('col.shop'))}">${window.IS_ADMIN ? `<input class="shop ${r.shop_price != null ? 'set' : ''}" data-id="${esc(r.item_id)}"
              value="${r.shop_price != null ? NF.format(r.shop_price) : ''}" placeholder="${r.median != null ? NF.format(r.median) : ''}"
              inputmode="decimal" aria-label="${esc(t('items.shop_for', { item: r.item_id }))}">`
              : `<span class="shop-ro">${r.shop_price != null ? gold(r.shop_price) : '–'}</span>`}</td>

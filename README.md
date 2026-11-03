@@ -20,6 +20,9 @@ The interface is in English by default; the **EN / DE** toggle in the top right 
   and names come from the game data and from a recorded click history (`ORDER` in
   `app/categories.py`, item order in `app/item_order.json`); entries that were not recorded follow
   alphabetically. The table's "Category" column sorts in the same order.
+- **Full screen width and mobile view**: on large screens the table fills the page. On tablets and
+  phones the header wraps, the categories can be folded in and out, and the item overview turns into
+  cards instead of a table.
 - **Settings** (top menu): show or hide each column of the item overview (everything except the item
   name). The choice is saved in the respective browser only.
 - **Item detail**: every listing with gear score, perks and listing time, a chart (gear: price by
