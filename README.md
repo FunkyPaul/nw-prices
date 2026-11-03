@@ -15,6 +15,11 @@ The interface is in English by default; the **EN / DE** toggle in the top right 
 - **Item overview** with in-game item names: min, 25th percentile, median, quantity-weighted average,
   max, number of listings and total quantity per item. Filter by name, category, tier and period;
   every column sorts.
+- **Categories like in the game**: next to the table is the trading post's category navigation (icon
+  rail, back button, number of listings per entry) with the in-game names in English and German. Order
+  and names come from the game data and from a recorded click history (`ORDER` in
+  `app/categories.py`, item order in `app/item_order.json`); entries that were not recorded follow
+  alphabetically. The table's "Category" column sorts in the same order.
 - **Item detail**: every listing with gear score, perks and listing time, a chart (gear: price by
   gear score or price ladder; resources: market depth) and the price history across captures.
 - **Perks** with names and effect text in English or German, values calculated for the item's
@@ -126,6 +131,8 @@ output language via `NWP_LANG=en|de`):
 
 ## Capture tips
 
+- A capture tool you can use: [linux-capture](https://github.com/openworldserver/linux-capture)
+  (Linux only).
 - A search returns **at most 100 listings per page**. For complete prices, click through
   categories as finely as possible (e.g. *Weapons → 1-Handed → Rapiers* instead of just *Weapons*)
   and page through or re-sort when there are many results. The **Captures** page shows "returned"

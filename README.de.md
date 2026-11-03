@@ -15,6 +15,11 @@ Deutsch (die Wahl merkt sich der Browser).
 - **Item-Übersicht** mit den Item-Namen aus dem Spiel: Min, 25-%-Quantil, Median,
   mengengewichteter Durchschnitt, Max, Angebotsanzahl und Gesamtmenge pro Item. Filter nach Name,
   Kategorie, Tier und Zeitraum; jede Spalte sortierbar.
+- **Kategorien wie im Spiel**: Links neben der Tabelle steht die Kategorie-Navigation des Trading Posts
+  (Symbolleiste, Zurück-Knopf, Anzahl Angebote je Eintrag), mit den Namen aus dem Spiel auf Deutsch und
+  Englisch. Reihenfolge und Namen kommen aus den Spieldaten bzw. einem aufgezeichneten Klickverlauf
+  (`ORDER` in `app/categories.py`, Item-Reihenfolge in `app/item_order.json`); nicht aufgezeichnete
+  Einträge folgen alphabetisch. Die Spalte „Kategorie“ der Tabelle sortiert in derselben Reihenfolge.
 - **Item-Detail**: alle Angebote mit Gear Score, Perks und Einstellzeit, Diagramm (Ausrüstung: Preis
   nach Gear Score bzw. Preisleiter; Ressourcen: Angebotstiefe) und Preisverlauf über Captures.
 - **Perks** mit Namen und Wirkungstext auf Deutsch oder Englisch. Die Werte werden für den Gear
@@ -126,6 +131,8 @@ Ausgabesprache mit `NWP_LANG=de`):
 
 ## Tipps zum Capturen
 
+- Ein Capture-Tool, das du verwenden kannst: [linux-capture](https://github.com/openworldserver/linux-capture)
+  (nur für Linux).
 - Eine Suche liefert **höchstens 100 Angebote pro Seite**. Für vollständige Preise also möglichst
   feine Kategorien anklicken (z. B. *Weapons → 1-Handed → Rapiers* statt nur *Weapons*) und bei
   vielen Treffern weiterblättern bzw. anders sortieren. Unter **Captures** siehst du pro Suche

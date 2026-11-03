@@ -16,7 +16,7 @@ from flask import (Flask, Response, abort, g, jsonify, redirect, render_template
                    url_for)
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from . import db, decoder, gamedata, i18n
+from . import categories, db, decoder, gamedata, i18n
 
 DB_PATH = os.environ.get('NWP_DB', os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'prices.db'))
 # Admin-Zugang (darf alles aendern). Ohne Passwort ist die Weboberflaeche nur lesbar.
@@ -287,12 +287,18 @@ def _with_names(rows, cur):
     for r in rows:
         r['name'] = gamedata.item_name(r['item_id'], cur) or r['item_id']
         r['icon'] = (gamedata.item_info(r['item_id']) or {}).get('icon') or ''
+        r['rank'] = categories.item_rank(r['item_id'])
     return rows
 
 
 @app.get('/api/items')
 def api_items():
     return jsonify(_with_names(db.item_overview(get_db(), _days(), sid(), *_gs()), lang()))
+
+
+@app.get('/api/categories')
+def api_categories():
+    return jsonify(categories.tree(lang()))
 
 
 @app.get('/api/item/<path:item_id>')

@@ -15,7 +15,6 @@
 {% else %}
 <section class="toolbar">
   <input id="q" type="search" placeholder="{{ t('filter.search') }}" autocomplete="off">
-  <select id="cat"><option value="">{{ t('filter.all_categories') }}</option></select>
   <select id="tier"><option value="">{{ t('filter.all_tiers') }}</option></select>
   <select id="days" title="{{ t('filter.period_title') }}">
     <option value="0">{{ t('filter.all_captures') }}</option>
@@ -57,6 +56,9 @@
 </dialog>
 {% endif %}
 
+<div class="cat-layout">
+<nav id="catnav" class="catnav" aria-label="{{ t('cat.nav') }}"></nav>
+<div class="cat-main">
 <div class="table-wrap">
 <table id="items" class="grid">
   <thead><tr>
@@ -76,6 +78,8 @@
 </table>
 </div>
 <p class="muted small" id="count"></p>
+</div>
+</div>
 {% endif %}
 {% endblock %}
 {% block scripts %}<script src="{{ url_for('static', filename='items.js') }}"></script>{% endblock %}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Erzeugt app/gamedata/{perks,items,stats,labels}.json.gz aus den Daten von nw-buddy
+Erzeugt app/gamedata/{perks,items,stats,labels,categories}.json.gz aus den Daten von nw-buddy
 (github.com/giniedp/nw-buddy-data).
 
   git clone --depth 1 --filter=blob:none --sparse https://github.com/giniedp/nw-buddy-data
@@ -77,6 +77,32 @@ def compact(d, fields):
         if isinstance(v, (int, float)) and not isinstance(v, bool) and v != 0:
             out[f] = v
     return out
+
+
+def category_names(items, loc):
+    """Namen der Trading-Post-Kategorien je Pfad (klein geschrieben): {'resources/rawresources': {'en': ..., 'de': ...}}.
+
+    Kategorie und Familie stehen im Spiel unter categorydata_<id>, Gruppen unter <id>_groupname.
+    """
+    def name(seg, depth, lang):
+        s = seg.lower()
+        keys = (f'categorydata_{s}', f'{s}_groupname') if depth < 2 else (f'{s}_groupname', f'categorydata_{s}')
+        for L in (loc[lang], loc['en']):
+            for k in keys:
+                if L.get(k):
+                    # Zeilenumbruch nach Bindestrich: Trennstrich ("Gesundheits-\nerholung") entfaellt vor Kleinbuchstaben
+                    text = re.sub(r'-\n(?=[a-zäöüß])', '', clean(L[k]))
+                    return text.replace('-\n', '-').replace('\n', ' ')
+        return seg
+
+    out = {}
+    for it in items.values():
+        segs = [x for x in (it.get('path') or '').split('/') if x]
+        for d in range(len(segs)):
+            key = '/'.join(segs[:d + 1]).lower()
+            if key not in out:
+                out[key] = {lang: name(segs[d], d, lang) for lang in LANGS}
+    return dict(sorted(out.items()))
 
 
 def main(src):
@@ -201,7 +227,9 @@ def main(src):
     labels['weapon_tiers'] = tiers
 
     OUT.mkdir(parents=True, exist_ok=True)
-    for name, data in (('perks', perks), ('items', items), ('stats', stats), ('labels', labels)):
+    categories = category_names(items, loc)
+    for name, data in (('perks', perks), ('items', items), ('stats', stats), ('labels', labels),
+                       ('categories', categories)):
         path = OUT / f'{name}.json.gz'
         with gzip.open(path, 'wt', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, separators=(',', ':'))

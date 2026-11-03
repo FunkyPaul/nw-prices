@@ -28,6 +28,10 @@ def items():
     return _load('items')
 
 
+def categories():
+    return _load('categories')
+
+
 def available():
     return bool(perks())
 

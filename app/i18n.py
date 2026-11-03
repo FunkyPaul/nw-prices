@@ -44,7 +44,11 @@ STRINGS = {
     'empty.text': ('Upload a ZIP from the capture tool under {link}.',
                    'Lade unter {link} eine ZIP aus dem Capture-Tool hoch.'),
     'filter.search': ('Search items …', 'Item suchen …'),
-    'filter.all_categories': ('All categories', 'Alle Kategorien'),
+    'cat.all': ('All items', 'Alle Items'),
+    'cat.back': ('Back', 'Zurück'),
+    'cat.none': ('None', 'Keine'),
+    'cat.nav': ('Categories', 'Kategorien'),
+    'cat.listings': ('{n} listings', '{n} Angebote'),
     'filter.all_tiers': ('All tiers', 'Alle Tiers'),
     'filter.tier_n': ('Tier {n}', 'Tier {n}'),
     'filter.period_title': ('Which captures to include', 'Zeitraum der berücksichtigten Captures'),
@@ -244,7 +248,7 @@ STRINGS = {
 
 # Texte, die das JavaScript braucht (Praefixe)
 JS_PREFIXES = ('col.', 'items.', 'filter.listings_', 'login.', 'srv.', 'err.server', 'item.', 'chart.', 'perktype.', 'rarity.', 'card.', 'toast.', 'cap.', 'sort.', 'num.', 'bulk.done',
-               'filter.all_categories', 'filter.all_tiers', 'filter.tier_n')
+               'cat.', 'filter.all_tiers', 'filter.tier_n')
 
 
 def normalize(lang):
