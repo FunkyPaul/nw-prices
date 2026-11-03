@@ -83,6 +83,18 @@ function shortNum(v) {
   return NI.format(+v.toFixed(2));
 }
 
+// Anzeige-Einstellungen (nur in diesem Browser): ausgeblendete Spalten der Item-Uebersicht
+const HIDDEN_COLS_KEY = 'nwp_hidden_cols';
+function hiddenCols() {
+  try {
+    const v = JSON.parse(localStorage.getItem(HIDDEN_COLS_KEY) || '[]');
+    return Array.isArray(v) ? v.filter(x => typeof x === 'string') : [];
+  } catch (e) { return []; }
+}
+function saveHiddenCols(list) {
+  try { localStorage.setItem(HIDDEN_COLS_KEY, JSON.stringify(list)); return true; } catch (e) { return false; }
+}
+
 // Abmelden
 document.getElementById('logoutBtn')?.addEventListener('click', async () => {
   try { await api('/api/logout', {}); } catch (e) { /* egal */ }

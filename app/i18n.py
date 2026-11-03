@@ -12,6 +12,7 @@ STRINGS = {
     'nav.items': ('Items', 'Items'),
     'nav.captures': ('Captures', 'Captures'),
     'nav.export': ('Export', 'Export'),
+    'nav.settings': ('Settings', 'Einstellungen'),
     'nav.language': ('Language', 'Sprache'),
     'export.shop_json': ('Shop prices (JSON)', 'Shop-Preise (JSON)'),
     'export.shop_csv': ('Shop prices (CSV)', 'Shop-Preise (CSV)'),
@@ -44,6 +45,27 @@ STRINGS = {
     'empty.text': ('Upload a ZIP from the capture tool under {link}.',
                    'Lade unter {link} eine ZIP aus dem Capture-Tool hoch.'),
     'filter.search': ('Search items …', 'Item suchen …'),
+    'set.title': ('Settings', 'Einstellungen'),
+    'set.overview': ('Item overview', 'Item-Übersicht'),
+    'set.intro': ('Choose which information is shown for each item in the overview. The item name is always shown.',
+                  'Wähle, welche Informationen pro Item in der Übersicht stehen. Der Item-Name wird immer angezeigt.'),
+    'set.note': ('These settings are saved in this browser only.', 'Diese Einstellungen werden nur in diesem Browser gespeichert.'),
+    'set.always': ('always shown', 'wird immer angezeigt'),
+    'set.col.icon': ('Item icon', 'Item-Symbol'),
+    'set.col.itemid': ('Item ID (small line under the name)', 'Item-ID (kleine Zeile unter dem Namen)'),
+    'set.col.category': ('Category', 'Kategorie'),
+    'set.col.tier': ('Tier', 'Tier'),
+    'set.col.gs': ('Gear score', 'Gear Score'),
+    'set.col.listings': ('Listings', 'Angebote'),
+    'set.col.quantity': ('Quantity', 'Menge'),
+    'set.col.min': ('Lowest price', 'Günstigster Preis'),
+    'set.col.median': ('Median', 'Median'),
+    'set.col.avg': ('Average (weighted by quantity)', 'Durchschnitt (nach Menge gewichtet)'),
+    'set.col.max': ('Highest price', 'Höchster Preis'),
+    'set.col.shop': ('Shop price', 'Shop-Preis'),
+    'set.show_all': ('Show everything', 'Alles anzeigen'),
+    'set.saved': ('Saved', 'Gespeichert'),
+    'set.save_failed': ('Could not save – the browser blocks local storage', 'Speichern nicht möglich – der Browser blockiert den lokalen Speicher'),
     'cat.all': ('All items', 'Alle Items'),
     'cat.back': ('Back', 'Zurück'),
     'cat.none': ('None', 'Keine'),
@@ -248,7 +270,7 @@ STRINGS = {
 
 # Texte, die das JavaScript braucht (Praefixe)
 JS_PREFIXES = ('col.', 'items.', 'filter.listings_', 'login.', 'srv.', 'err.server', 'item.', 'chart.', 'perktype.', 'rarity.', 'card.', 'toast.', 'cap.', 'sort.', 'num.', 'bulk.done',
-               'cat.', 'filter.all_tiers', 'filter.tier_n')
+               'cat.', 'set.', 'filter.all_tiers', 'filter.tier_n')
 
 
 def normalize(lang):

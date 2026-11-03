@@ -3,6 +3,8 @@
   if (!tbody) return;
   const $ = id => document.getElementById(id);
   const state = { rows: [], sort: 'category', dir: 1, cat: '' };
+  // Ausgeblendete Spalten (Einstellungen)
+  $('items').dataset.hide = hiddenCols().join(' ');
 
   // Filter in der URL merken, damit Links/Lesezeichen funktionieren
   const params = new URLSearchParams(location.search);
@@ -153,16 +155,16 @@
     tbody.innerHTML = rows.map(r => `
       <tr>
         <td class="item" data-id="${esc(r.item_id)}"><div class="item-cell"><span class="mini-icon">${r.icon ? `<img src="${NWCard.iconUrl(r.icon)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span><span><a href="/item/${encodeURIComponent(r.item_id)}">${esc(r.name || r.item_id)}</a>${r.name && r.name !== r.item_id ? `<span class="iid">${esc(r.item_id)}</span>` : ''}</span></div></td>
-        <td class="cat">${esc(catLabel(r.category)).replace(/\//g, '/<wbr>')}</td>
-        <td class="num">${tierBadge(r.tier)}</td>
-        <td class="num">${r.gs_max ? (r.gs_min === r.gs_max ? r.gs_min : `${r.gs_min}–${r.gs_max}`) : '<span class="muted">–</span>'}</td>
-        <td class="num">${r.listings ? int(r.listings) : `<span class="pill muted" title="${esc(t('items.no_listings_title'))}">${esc(t('items.no_listings'))}</span>`}</td>
-        <td class="num">${int(r.quantity)}</td>
-        <td class="num">${gold(r.min)}</td>
-        <td class="num">${gold(r.median)}</td>
-        <td class="num">${gold(r.avg_weighted)}</td>
-        <td class="num">${gold(r.max)}</td>
-        <td class="num">${window.IS_ADMIN ? `<input class="shop ${r.shop_price != null ? 'set' : ''}" data-id="${esc(r.item_id)}"
+        <td class="cat" data-col="category">${esc(catLabel(r.category)).replace(/\//g, '/<wbr>')}</td>
+        <td class="num" data-col="tier">${tierBadge(r.tier)}</td>
+        <td class="num" data-col="gs">${r.gs_max ? (r.gs_min === r.gs_max ? r.gs_min : `${r.gs_min}–${r.gs_max}`) : '<span class="muted">–</span>'}</td>
+        <td class="num" data-col="listings">${r.listings ? int(r.listings) : `<span class="pill muted" title="${esc(t('items.no_listings_title'))}">${esc(t('items.no_listings'))}</span>`}</td>
+        <td class="num" data-col="quantity">${int(r.quantity)}</td>
+        <td class="num" data-col="min">${gold(r.min)}</td>
+        <td class="num" data-col="median">${gold(r.median)}</td>
+        <td class="num" data-col="avg">${gold(r.avg_weighted)}</td>
+        <td class="num" data-col="max">${gold(r.max)}</td>
+        <td class="num" data-col="shop">${window.IS_ADMIN ? `<input class="shop ${r.shop_price != null ? 'set' : ''}" data-id="${esc(r.item_id)}"
              value="${r.shop_price != null ? NF.format(r.shop_price) : ''}" placeholder="${r.median != null ? NF.format(r.median) : ''}"
              inputmode="decimal" aria-label="${esc(t('items.shop_for', { item: r.item_id }))}">`
              : `<span class="shop-ro">${r.shop_price != null ? gold(r.shop_price) : '–'}</span>`}</td>

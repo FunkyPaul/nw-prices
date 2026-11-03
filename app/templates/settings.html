@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block main %}
+<section class="panel settings">
+  <h2>{{ t('set.title') }}</h2>
+  <h3>{{ t('set.overview') }}</h3>
+  <p class="muted">{{ t('set.intro') }}</p>
+  <div class="set-list" id="setCols">
+    <label class="chk"><input type="checkbox" checked disabled> {{ t('col.item') }} <span class="muted small">({{ t('set.always') }})</span></label>
+    {% for key, label in cols %}
+    <label class="chk"><input type="checkbox" data-col="{{ key }}" checked> {{ t(label) }}</label>
+    {% endfor %}
+  </div>
+  <div class="set-actions">
+    <button type="button" class="ghost" id="setAll">{{ t('set.show_all') }}</button>
+    <span class="muted small">{{ t('set.note') }}</span>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='settings.js') }}"></script>{% endblock %}

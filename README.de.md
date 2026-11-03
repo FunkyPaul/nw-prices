@@ -20,6 +20,8 @@ Deutsch (die Wahl merkt sich der Browser).
   Englisch. Reihenfolge und Namen kommen aus den Spieldaten bzw. einem aufgezeichneten Klickverlauf
   (`ORDER` in `app/categories.py`, Item-Reihenfolge in `app/item_order.json`); nicht aufgezeichnete
   Einträge folgen alphabetisch. Die Spalte „Kategorie“ der Tabelle sortiert in derselben Reihenfolge.
+- **Einstellungen** (Menüpunkt oben): Spalten der Item-Übersicht einzeln ein- und ausblenden (alles außer dem
+  Item-Namen). Die Auswahl wird nur im jeweiligen Browser gespeichert.
 - **Item-Detail**: alle Angebote mit Gear Score, Perks und Einstellzeit, Diagramm (Ausrüstung: Preis
   nach Gear Score bzw. Preisleiter; Ressourcen: Angebotstiefe) und Preisverlauf über Captures.
 - **Perks** mit Namen und Wirkungstext auf Deutsch oder Englisch. Die Werte werden für den Gear

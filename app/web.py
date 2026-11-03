@@ -233,6 +233,18 @@ def item_page(item_id):
                            item_name=gamedata.item_name(item_id, lang()) or item_id)
 
 
+# Spalten der Item-Uebersicht, die sich ausblenden lassen (Schluessel = data-col in index.html / items.js)
+OVERVIEW_COLS = (('icon', 'set.col.icon'), ('itemid', 'set.col.itemid'), ('category', 'set.col.category'),
+                 ('tier', 'set.col.tier'), ('gs', 'set.col.gs'), ('listings', 'set.col.listings'),
+                 ('quantity', 'set.col.quantity'), ('min', 'set.col.min'), ('median', 'set.col.median'),
+                 ('avg', 'set.col.avg'), ('max', 'set.col.max'), ('shop', 'set.col.shop'))
+
+
+@app.get('/settings')
+def settings_page():
+    return render_template('settings.html', page='settings', cols=OVERVIEW_COLS)
+
+
 @app.get('/captures')
 def captures_page():
     return render_template('captures.html', captures=db.list_captures(get_db(), sid()), page='captures',

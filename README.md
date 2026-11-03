@@ -20,6 +20,8 @@ The interface is in English by default; the **EN / DE** toggle in the top right 
   and names come from the game data and from a recorded click history (`ORDER` in
   `app/categories.py`, item order in `app/item_order.json`); entries that were not recorded follow
   alphabetically. The table's "Category" column sorts in the same order.
+- **Settings** (top menu): show or hide each column of the item overview (everything except the item
+  name). The choice is saved in the respective browser only.
 - **Item detail**: every listing with gear score, perks and listing time, a chart (gear: price by
   gear score or price ladder; resources: market depth) and the price history across captures.
 - **Perks** with names and effect text in English or German, values calculated for the item's

@@ -283,3 +283,14 @@ button.perk.sel { outline: 2px solid var(--gold); color: #fff; }
   .cat-layout { grid-template-columns: 1fr; }
   .catnav { position: static; max-height: 340px; }
 }
+
+/* Einstellungen / ausblendbare Spalten */
+.settings { max-width: 640px; }
+.set-list { display: flex; flex-direction: column; gap: .15rem; margin: .8rem 0 1rem; }
+.set-list .chk { padding: .35rem .2rem; color: var(--text); }
+.set-list .chk input { width: 1.05rem; height: 1.05rem; }
+.set-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; }
+#items[data-hide~="category"] [data-col="category"], #items[data-hide~="tier"] [data-col="tier"], #items[data-hide~="gs"] [data-col="gs"],
+#items[data-hide~="listings"] [data-col="listings"], #items[data-hide~="quantity"] [data-col="quantity"], #items[data-hide~="min"] [data-col="min"],
+#items[data-hide~="median"] [data-col="median"], #items[data-hide~="avg"] [data-col="avg"], #items[data-hide~="max"] [data-col="max"],
+#items[data-hide~="shop"] [data-col="shop"], #items[data-hide~="icon"] .mini-icon, #items[data-hide~="itemid"] .iid { display: none; }

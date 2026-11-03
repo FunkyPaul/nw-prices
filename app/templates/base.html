@@ -12,6 +12,7 @@
   <nav>
     <a href="{{ url_for('index') }}" class="{{ 'on' if page=='items' }}">{{ t('nav.items') }}</a>
     <a href="{{ url_for('captures_page') }}" class="{{ 'on' if page=='captures' }}">{{ t('nav.captures') }}</a>
+    <a href="{{ url_for('settings_page') }}" class="{{ 'on' if page=='settings' }}">{{ t('nav.settings') }}</a>
     <span class="sep"></span>
     <select id="serverSelect" class="server-select" aria-label="{{ t('srv.label') }}">
       <option value="">{{ t('srv.all') }}</option>
