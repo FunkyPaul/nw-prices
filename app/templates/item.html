@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}{{ item_name }} – NW Prices{% endblock %}
 {% block main %}
-<p class="crumbs"><a href="{{ url_for('index') }}">{{ t('nav.items') }}</a> <span id="crumbCat"></span></p>
+<p class="crumbs"><a href="{{ url_for('index') }}" id="backBtn" class="back-btn">‹ {{ t('nav.back') }}</a>
+  <a href="{{ url_for('index') }}">{{ t('nav.items') }}</a> <span id="crumbCat"></span></p>
 <h1 class="item-title">{{ item_name }}</h1>
 <p class="item-id muted">{{ item_id }}</p>
 

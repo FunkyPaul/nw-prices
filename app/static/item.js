@@ -1,6 +1,45 @@
 (() => {
   const $ = id => document.getElementById(id);
   let data;
+
+  // Diagramm-Tooltips: <title>-Texte (Browser zeigt sie erst nach Sekunden) durch sofortige eigene Tooltips ersetzen
+  const tip = document.createElement('div');
+  tip.className = 'chart-tip'; tip.hidden = true;
+  document.body.appendChild(tip);
+  function moveTip(ev) {
+    const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = ev.clientX + pad, y = ev.clientY + pad;
+    if (x + w > innerWidth - 8) x = Math.max(8, ev.clientX - w - pad);
+    if (y + h > innerHeight - 8) y = Math.max(8, ev.clientY - h - pad);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  }
+  function chartTips(box) {
+    for (const ti of [...box.querySelectorAll('svg title')]) {
+      const el = ti.parentNode;
+      el.dataset.tip = ti.textContent;
+      ti.remove();
+      if (el.tagName === 'line') {   // duenne Linien (Shop-Preis) bekommen eine breitere unsichtbare Trefferflaeche
+        const hit = el.cloneNode(false);
+        hit.setAttribute('class', 'hit');
+        el.after(hit);
+      }
+    }
+    if (box.dataset.tips) return;
+    box.dataset.tips = '1';
+    box.addEventListener('mouseover', ev => {
+      const el = ev.target.closest('[data-tip]');
+      if (!el) return;
+      tip.textContent = el.dataset.tip; tip.hidden = false; moveTip(ev);
+    });
+    box.addEventListener('mousemove', ev => { if (!tip.hidden) moveTip(ev); });
+    box.addEventListener('mouseout', ev => { if (ev.target.closest('[data-tip]')) tip.hidden = true; });
+  }
+  // Zurueck zur vorherigen Ansicht (Uebersicht mit Filter/Kategorie); ohne Verlauf zur Kategorie des Items
+  $('backBtn').addEventListener('click', e => {
+    let sameSite = false;
+    try { sameSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (err) { /* egal */ }
+    if (sameSite && history.length > 1) { e.preventDefault(); history.back(); }
+  });
   const selected = new Set();   // ausgewaehlte Perk-Hashes
   let cardListing = null;       // Angebot, dessen Karte angezeigt wird
   function showCard(l) {
@@ -81,7 +120,10 @@
   async function load() {
     data = await api('/api/item/' + encodeURIComponent(ITEM_ID));
     const s = data.stats;
-    if (data.category) $('crumbCat').textContent = '› ' + data.category.split('/').join(' › ');
+    if (data.category) {
+      $('crumbCat').textContent = '› ' + data.category.split('/').join(' › ');
+      $('backBtn').href = '/?cat=' + encodeURIComponent(data.category);
+    }
     const tier = data.listings.length ? Math.max(...data.listings.map(l => l.tier || 0)) : null;
     const cards = [
       [t('item.lowest'), gold(s.min), 'gold'], [t('item.p25'), gold(s.p25)], [t('item.median'), gold(s.median)],
@@ -171,6 +213,7 @@
     }
     svg += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${m.t + ih}" y2="${m.t + ih}"/>`;
     $('chart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img">${svg}</svg>`;
+    chartTips($('chart'));
   }
 
   function drawHistory() {
@@ -195,6 +238,7 @@
     });
     svg += `<text x="${W - m.r}" y="${m.t + 10}" text-anchor="end"><tspan fill="#d9a845">— ${esc(t('col.min'))}</tspan>  <tspan fill="#8fc0f0">— ${esc(t('col.median'))}</tspan></text>`;
     $('history').innerHTML = `<svg viewBox="0 0 ${W} ${H}">${svg}</svg>`;
+    chartTips($('history'));
   }
 
   async function save() {

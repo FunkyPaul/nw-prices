@@ -352,3 +352,14 @@ button.perk.sel { outline: 2px solid var(--gold); color: #fff; }
   #items input.shop { width: 100%; text-align: left; }
   .table-wrap { background: transparent; }
 }
+
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .5rem; }
+.back-btn { display: inline-flex; align-items: center; padding: .15rem .7rem; margin-right: .3rem; font-weight: 600; color: var(--text); background: var(--panel2);
+  border: 1px solid var(--line); border-radius: 6px; }
+.back-btn:hover { text-decoration: none; border-color: var(--gold-dim); color: var(--gold); }
+
+/* Diagramm-Tooltips (sofort, statt Browser-Title) */
+.chart-tip { position: fixed; z-index: 60; pointer-events: none; max-width: 300px; background: var(--panel2); border: 1px solid var(--gold-dim); border-radius: 6px;
+  padding: .35rem .6rem; font-size: .85rem; line-height: 1.35; white-space: pre-line; box-shadow: 0 6px 20px #0009; }
+.chart .dot { stroke: #0000; stroke-width: 12px; }
+.chart .hit { stroke: #0000; stroke-width: 14px; fill: none; }

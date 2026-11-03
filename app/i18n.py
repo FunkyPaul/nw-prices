@@ -13,6 +13,7 @@ STRINGS = {
     'nav.captures': ('Captures', 'Captures'),
     'nav.export': ('Export', 'Export'),
     'nav.settings': ('Settings', 'Einstellungen'),
+    'nav.back': ('Back', 'Zurück'),
     'nav.language': ('Language', 'Sprache'),
     'export.shop_json': ('Shop prices (JSON)', 'Shop-Preise (JSON)'),
     'export.shop_csv': ('Shop prices (CSV)', 'Shop-Preise (CSV)'),
